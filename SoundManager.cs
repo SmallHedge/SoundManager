@@ -6,14 +6,7 @@ using System;
 
 public enum SoundType
 {
-    SWORD,
-    MAGIC,
-    LAND,
-    JUMP,
-    HURT,
-    HURTMAGE,
-    FOOTSTEP,
-    ATTACK
+    //ADD SOUND EFFECT NAMES
 }
 
 [RequireComponent(typeof(AudioSource)), ExecuteInEditMode]
