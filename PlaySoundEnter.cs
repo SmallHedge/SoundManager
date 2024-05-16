@@ -1,15 +1,18 @@
 //Author: Small Hedge Games
-//Published: 12/04/2024
+//Published: 16/05/2024
 
 using UnityEngine;
 
-public class PlaySoundEnter : StateMachineBehaviour
+namespace SHG.SoundManager
 {
-    [SerializeField] private SoundType sound;
-    [SerializeField, Range(0, 1)] private float volume = 1;
-
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public class PlaySoundEnter : StateMachineBehaviour
     {
-        SoundManager.PlaySound(sound, volume);
+        [SerializeField] private SoundType sound;
+        [SerializeField, Range(0, 1)] private float volume = 1;
+
+        override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            SoundManager.PlaySound(sound, volume);
+        }
     }
 }
