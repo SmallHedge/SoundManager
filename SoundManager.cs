@@ -1,14 +1,20 @@
 //Author: Small Hedge Games
-//Updated: 16/05/2024
+//Updated: 20/05/2024
 
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 namespace SHG.SoundManager
 {
     public enum SoundType
     {
-        //ADD SOUND EFFECT NAMES
+        TEST,
+        UI_HOVER,
+        UI_CLICK,
+        UI_GAMESTART,
+        UI_OPTIONS,
+        UI_QUIT,
     }
 
     [RequireComponent(typeof(AudioSource))]
@@ -20,13 +26,7 @@ namespace SHG.SoundManager
 
         private void Awake()
         {
-            if (instance == null)
-            {
-                instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-                Destroy(gameObject);
+            instance = this;
         }
 
         private void Start()
@@ -36,25 +36,38 @@ namespace SHG.SoundManager
 
         public static void PlaySound(SoundType sound, float volume = 1)
         {
-            AudioClip[] clips = instance.soundList[(int)sound].Sounds;
+            AudioClip[] clips = instance.soundList[(int)sound].sounds;
             AudioClip randomClip = clips[UnityEngine.Random.Range(0, clips.Length)];
             instance.audioSource.PlayOneShot(randomClip, volume);
         }
 
         public void Resize()
         {
+            Dictionary<string, AudioClip[]> clips = new();
+            for (int i = 0; i < soundList.Length; ++i)
+            {
+                if (soundList[i].sounds.Length > 0)
+                    clips.Add(soundList[i].name, soundList[i].sounds);
+            }
+
             string[] names = Enum.GetNames(typeof(SoundType));
             Array.Resize(ref soundList, names.Length);
             for (int i = 0; i < soundList.Length; i++)
-                soundList[i].name = names[i];
+            {
+                string currentName = names[i];
+                soundList[i].name = currentName;
+                if (clips.ContainsKey(currentName))
+                    soundList[i].sounds = clips[currentName];
+                else
+                    soundList[i].sounds = null;
+            }
         }
     }
 
     [Serializable]
     public struct SoundList
     {
-        public AudioClip[] Sounds { get => sounds; }
         [HideInInspector] public string name;
-        [SerializeField] private AudioClip[] sounds;
+        public AudioClip[] sounds;
     }
 }
